@@ -19,7 +19,8 @@ transactions = [
 # Read operation
 @app.route('/', methods=['GET'])
 def get_transactions():
-    return render_template('transactions.html', transactions=transactions)
+    total_balance = sum(transaction['amount'] for transaction in transactions)
+    return render_template('transactions.html', transactions=transactions, total_balance=total_balance)
 
 
 # Create operation
@@ -62,6 +63,13 @@ def search_transactions():
                                  min_amount < transaction['amount'] < max_amount]
         return render_template('transactions.html', transactions=filtered_transactions)
     return render_template('search.html')
+
+# Total Balance
+@app.route('/balance')
+def total_balance():
+    balance = sum(transaction['amount'] for transaction in transactions)
+    return f"Total Balance: {balance}"
+
 
 # Run the Flask app
 if __name__ == "__main__":
